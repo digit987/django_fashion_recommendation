@@ -1,0 +1,36 @@
+<!-- templates/checkout.html -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout</title>
+</head>
+<body>
+    {% if user.is_authenticated %}
+        <p>Welcome, {{ user.username }}!</p>
+        <form method="POST" action="{% url 'logout' %}">
+            {% csrf_token %}
+            <button type="submit">Logout</button>
+        </form>
+    {% else %}
+        <a href="{% url 'login' %}">Login</a>
+        <a href="{% url 'register' %}">Register</a>
+    {% endif %}
+
+    <a href="{% url 'index' %}">Home</a>
+
+    <h2>Order Summary</h2>
+    <p>Order ID: {{ order.id }}</p>
+    <h3>Ordered Items</h3>
+    {% for item in order.orderitem_set.all %}
+        <div>
+            <h4>{{ item.product.name }}</h4>
+            <p>Quantity: {{ item.quantity }}</p>
+            <p>Price: ${{ item.price }}</p>
+        </div>
+    {% endfor %}
+    <p>Total: ${{ order.total_price }}</p>
+    <p>Thank you for your purchase!</p>
+</body>
+</html>
